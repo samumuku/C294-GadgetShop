@@ -5,53 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
     <script src="https://unpkg.com/vue@3.0.11/dist/vue.global.js"></script>
-    <title>Document</title>
+    <title>Vue Gadget Shop</title>
   </head>
   <body>
     <div id="app">
       <h1>{{ title }}</h1>
       <p>{{ description }}</p>
-      <div class="cart">
-        <h2>🛒 Mon Panier ({{cart.length}})</h2>
-        <ul>
-          <li v-if="cart.length > 0" v-for="gadget in cart" :key="gadget.id">
-            {{gadget.name}} - {{gadget.price}}€
-            <button class="remove-btn" @click="removeFromCart(gadget)">
-              ❌
-            </button>
-          </li>
-          <li v-else>Votre panier est vide.</li>
-        </ul>
-        <h3>
-          💰 Total :
-          <span v-if="cartTotal < 1000" style="display: hidden"
-            >{{cartTotal}}€</span
-          >
-          <span v-if="cartTotal >= 1000">
-            <s>{{cartTotal}}€</s> ➝
-            <strong>{{discountedTotal}}€ (-10%)</strong>
-          </span>
-        </h3>
-      </div>
+      <cart-display
+        :cart="cart"
+        :cart-total="cartTotal"
+        :discounted-total="discountedTotal"
+        @remove-from-cart="removeFromCart"
+      ></cart-display>
+
       <div class="gadget-container">
-        <div class="gadget" v-for="gadget in gadgets" :key="gadget.id">
-          <img v-bind:src="gadget.image" />
-          <h2>{{gadget.name}}</h2>
-          <p>Prix : {{gadget.price}}€</p>
-          <p v-if="gadget.inStock">✅ En stock</p>
-          <p v-else>❌ En rupture de stock</p>
-          <button
-            class="add-btn"
-            :disabled="!gadget.inStock"
-            @click="addToCart(gadget)"
-          >
-            Ajouter au panier
-          </button>
-        </div>
+        <gadget-display
+          :gadget="gadget"
+          v-for="gadget in gadgets"
+          :key="gadget.id"
+          @add-to-cart="addToCart"
+        ></gadget-display>
       </div>
     </div>
 
     <script src="./main.js"></script>
+
+    <script src="./components/GadgetDisplay.js"></script>
+
+    <script src="./components/CartDisplay.js"></script>
+
     <script>
       const mountedApp = app.mount("#app");
     </script>

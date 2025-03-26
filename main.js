@@ -11,6 +11,7 @@ const app = Vue.createApp({
           price: 799,
           image: "./assets/phone.jpg",
           inStock: true,
+          cartQuantity: 0,
         },
         {
           id: 2,
@@ -18,6 +19,7 @@ const app = Vue.createApp({
           price: 1299,
           image: "./assets/laptop.jpg",
           inStock: false,
+          cartQuantity: 0,
         },
         {
           id: 3,
@@ -25,6 +27,7 @@ const app = Vue.createApp({
           price: 199,
           image: "./assets/earbuds.jpg",
           inStock: true,
+          cartQuantity: 0,
         },
       ],
       cart: [],
@@ -32,10 +35,24 @@ const app = Vue.createApp({
   },
   methods: {
     addToCart(gadget) {
-      this.cart.push(gadget);
+      if (this.cart.includes(gadget)) {
+        this.gadget.cartQuantity += 1;
+      } else {
+        this.cart.push(gadget);
+      }
     },
     removeFromCart(index) {
       this.cart.splice(index, 1);
+    },
+    addQuantity(gadget) {
+      gadget.cartQuantity += 1;
+    },
+    removeQuantity(gadget) {
+      if (gadget.cartQuantity > 1) {
+        gadget.cartQuantity -= 1;
+      } else {
+        this.removeFromCart(gadget);
+      }
     },
   },
   computed: {
