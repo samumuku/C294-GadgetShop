@@ -11,7 +11,8 @@ const app = Vue.createApp({
           price: 799,
           image: "./assets/phone.jpg",
           inStock: true,
-          cartQuantity: 0,
+          cartQuantity: 1,
+          reviews: [],
         },
         {
           id: 2,
@@ -19,7 +20,8 @@ const app = Vue.createApp({
           price: 1299,
           image: "./assets/laptop.jpg",
           inStock: false,
-          cartQuantity: 0,
+          cartQuantity: 1,
+          reviews: [],
         },
         {
           id: 3,
@@ -27,7 +29,8 @@ const app = Vue.createApp({
           price: 199,
           image: "./assets/earbuds.jpg",
           inStock: true,
-          cartQuantity: 0,
+          cartQuantity: 1,
+          reviews: [],
         },
       ],
       cart: [],
@@ -35,29 +38,29 @@ const app = Vue.createApp({
   },
   methods: {
     addToCart(gadget) {
-      if (this.cart.includes(gadget)) {
-        this.gadget.cartQuantity += 1;
+      let itemInCart = this.cart.find((item) => item.id === gadget.id);
+
+      if (itemInCart) {
+        this.gadget.cartQuantity++;
       } else {
-        this.cart.push(gadget);
+        this.cart.push({ ...gadget });
       }
     },
     removeFromCart(index) {
       this.cart.splice(index, 1);
     },
-    addQuantity(gadget) {
-      gadget.cartQuantity += 1;
-    },
-    removeQuantity(gadget) {
-      if (gadget.cartQuantity > 1) {
-        gadget.cartQuantity -= 1;
-      } else {
-        this.removeFromCart(gadget);
+    addReview(gadget, review) {
+      if (review) {
+        gadget.reviews.push(review);
       }
     },
   },
   computed: {
     cartTotal() {
-      return this.cart.reduce((acc, gadget) => acc + gadget.price, 0);
+      return this.cart.reduce(
+        (acc, gadget) => acc + gadget.price * gadget.cartQuantity,
+        0
+      );
     },
     discountedTotal() {
       if (this.cartTotal > 1000) {

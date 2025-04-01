@@ -19,7 +19,7 @@ app.component("cart-display", {
       <li v-if="cart.length > 0" v-for="gadget in cart" :key="gadget.id">
         {{gadget.name}} - {{gadget.price}}€
         <button class ="remove-btn" @click="removeQuantity(gadget)">➖</button>
-        <strong>{{cartQuantity}}</strong>
+        <strong>{{gadget.cartQuantity}}</strong>
         <button class ="add-btn" @click="addQuantity(gadget)">➕</button>
         <button class="remove-btn" @click="removeFromCart(gadget)">
           ❌
@@ -43,10 +43,14 @@ app.component("cart-display", {
       this.$emit("remove-from-cart", gadget);
     },
     addQuantity(gadget) {
-      this.$emit("add-quantity", gadget);
+      gadget.cartQuantity++;
     },
     removeQuantity(gadget) {
-      this.$emit("remove-quantity", gadget);
+      if (gadget.cartQuantity > 1) {
+        gadget.cartQuantity--;
+      } else {
+        this.removeFromCart(gadget);
+      }
     },
   },
 });
